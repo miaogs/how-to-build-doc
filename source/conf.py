@@ -58,4 +58,25 @@ source_suffix = {
     '.txt': 'markdown',
     '.md': 'markdown',
 }
+latex_engine = 'xelatex'
 
+latex_elements = {
+    'papersize': 'a4paper',
+    # Additional stuff for the LaTeX preamble.
+    'preamble': r'''
+    \usepackage{xeCJK}
+    \usepackage{indentfirst}
+    \setlength{\parindent}{2em}
+    \setCJKmainfont[BoldFont=STFangsong, ItalicFont=STKaiti]{STSong}
+    \setCJKsansfont[BoldFont=STHeiti]{STXihei}
+    \setCJKmonofont{STFangsong}
+    ''',
+}
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    ('index', 'How_To_Build_Doc.tex', 'How To Build Doc',
+    'author: Michael Miao', 'manual', True),
+]
