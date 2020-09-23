@@ -80,3 +80,15 @@ latex_documents = [
     ('index', 'How_To_Build_Doc.tex', 'How To Build Doc',
     'author: Michael Miao', 'manual', True),
 ]
+
+# The master toctree document.
+# The document name of the “master” document, that is, the document that contains the root toctree directive.
+# Default is 'index'.
+# Changed in version 2.0: The default is changed to 'index' from 'contents'.
+
+# If you have your own `conf.py` file, it overrides Read the Doc's default `conf.py`.
+# By default, Sphinx expects the master doc to be contents. Read the Docs will set master doc
+# to index instead (or whatever it is you have specified in your settings).
+# Try adding this to your `conf.py`:
+
+master_doc = 'index'
