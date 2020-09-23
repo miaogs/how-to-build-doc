@@ -15,6 +15,8 @@ Welcome to How To Build Doc's documentation!
    support_markdown
    support_mark
    generate_pdf
+   preview_html
+
 
 Indices and tables
 ==================
