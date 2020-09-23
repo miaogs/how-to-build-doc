@@ -16,6 +16,7 @@ Welcome to How To Build Doc's documentation!
    support_mark
    generate_pdf
    preview_html
+   read_the_doc
 
 
 Indices and tables
