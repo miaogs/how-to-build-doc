@@ -11,12 +11,9 @@ Welcome to How To Build Doc's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   quickstart
-   support_markdown
-   support_mark
-   generate_pdf
-   preview_html
-   read_the_doc
+   armstardupandinitialization
+   arm_develop
+   freertos
 
 
 Indices and tables
