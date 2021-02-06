@@ -1,7 +1,8 @@
 .. _armstardupandinitialization:
 
-ARM 编译器C库的启动和初始化
-============================
+=======
+ARM 内核启动和初始化
+========================
 
 
 ARM 官网资料
@@ -55,7 +56,7 @@ __rt_entry 函数会在后面专门讲解。
 __scatterload
 ----------------
 
-我们可以先来看看官方文档(`ARM Compiler C Library Startup and Initialization <https://documentation-service.arm.com/static/5ed10b24ca06a95ce53f8bbf?token=>`_ )的描述。(这里我翻译的可能不是很好。)
+我们可以先来看看官方文档的描述。(这里我翻译的可能不是很好。)
 
 应用程序代码和数据可以在根区域或非根区域中。根区域具有相同的加载时间和执行时间地址。非根区域具有不同的加载时间和执行时间地址。
 根区域包含ARM链接器输出的区域表。区域表包含需要初始化的非根代码和数据区域的地址。区域表还包含一个函数指针，该指针指示该区域需要进行哪些初始化，
@@ -63,31 +64,30 @@ __scatterload
 
 `__scatterload` 遍历区域表并初始化各种执行时区域。 有以下功能：
 
-- 将零初始化区域 （ `Zero Initialized sections` ：简称 `ZI sections` ） 初始化为零
+- 将零初始化区域 （Zero Initialized sections：简称ZI sections ） 初始化为零
 - 将非根(RO和RW)运行区域从其加载时位置复制或解压缩到执行时区域。如果压缩了任何数据段，则将它们从加载地址解压缩到执行地址。
 
 `__main` 总是在启动期间在调用 `__rt_entry` 之前调用此函数。
 
-
 其实，简单的讲， `__scatterload` 主要的职责就是把 `RW/RO` 输出段从加载地址( `LMA` )复制到运行地址( `VMA` )，并完成了ZI运行域的初始化工作。
 
-比如比较常见的， 我们经常把固件烧录到芯片的 `Flash` 里面，运行的时候需要把 `RW/RO` 输出段 从 `Flash` 搬到 `RAM` 上运行。当然了，我们也可以指定部分代码直接在 `RAM` 当中。
+比如比较常见的， 我们经常把固件烧录到芯片的 Flash 里面，运行的时候需要把 RW/RO 输出段 从 Flash 搬到 RAM 上运行。当然了，我们也可以指定部分代码直接在 RAM 当中。
 
-“ARM程序” 是指在ARM系统中正在执行的程序，而非保存在 `ROM` 或者 `Flash` 中的 `.bin(.axf,.hex)` 映像（ `image` ）文件。
+“ARM程序” 是指在ARM系统中正在执行的程序，而非保存在ROM或者Flash 中的 .bin(.axf,.hex)映像（image）文件。
 
-一个 `ARM` 程序包含3部分： `RO` ， `RW` 和 `ZI`
+一个ARM程序包含3部分：RO，RW和ZI
 
-- `RW`  : `Read-write` , 可读写的数据，程序中已经初始化并且非0的变量。
-- `RO`  : `Read Only` , 只读数据，程序中的指令和常量。
-- `ZI`  : `Zero Initialized` , 程序中未初始化的变量和初始化为0的变量。
+- RW  : Read-write , 可读写的数据，程序中已经初始化并且非0的变量。
+- RO  : Read Only , 只读数据，程序中的指令和常量。
+- ZI  : Zero Initialized, 程序中未初始化的变量和初始化为0的变量。
 
 其次，我们在编译结束之后，可以在 `*.map` 或者 编译信息的结尾可以看到 `RAM size` 和 `ROM size` 之类的信息。
  
 这个是如何计算出来的的。
 
-- `ZI Data` : `Zero Initialized Data`
+- ZI Data: Zero Initialized Data
 
-- `RO Data` 是常量。另外 一些常量（ `RO` 数据）是由编译器/链接器生成的，也可能来自库。因此它们也将存在，无论您的程序有没有显式定义任何常量。
+- RO Data 是常量。另外 一些常量（RO数据）是由编译器/链接器生成的，也可能来自库。因此它们也将存在，无论您的程序有没有显式定义任何常量。
 
   :: 
 
@@ -125,10 +125,10 @@ __rt_entry
 * 使用链接器分散文件中指定的 `ARM_LIB_STACK` 或 `ARM_LIB_STACKHEAP` 区域的顶部。
 
 
-`__rt_entry` 和 `__rt_lib_init` 在C库中不作为完整函数存在。这些函数的小部分出现在C库的一部分内部对象中。
+__rt_entry和__rt_lib_init在C库中不作为完整函数存在。这些函数的小部分出现在C库的一部分内部对象中。
 并非所有这些代码段都对给定的用户应用程序有用。链接器确定给定应用程序需要那些代码节的哪个子集，并且仅在启动代码中包括那些节。
-链接器按正确的顺序放置这些部分，以根据用户应用程序的要求创建自定义 `__rt_entry` 和 `__rt_lib_init` 函数。
-`__rt_lib_init` 调用的函数中介绍了 `__rt_lib_init` 调用的函数。
+链接器按正确的顺序放置这些部分，以根据用户应用程序的要求创建自定义__rt_entry和__rt_lib_init函数。
+__rt_lib_init调用的函数中介绍了__rt_lib_init调用的函数。
 
 
 
@@ -137,19 +137,19 @@ __rt_entry
 1. 可以通过多种方式设置堆栈和堆，比如调用 `__user_setup_stackheap()` 函数 ,或者调用 `__rt_stackheap_init()` 或者加载分散加载区域的绝对地址。
 
 2. 调用 `__rt_lib_init()` 初始化引用的库函数，初始化语言环境，并在必要时为 `main()` 设置 `argc` 和 `argv` 。
-   对于 C++，通过 `__cpp_initialize__aeabi_` 调用任何顶级对象的构造函数。
+对于 C++，通过 `__cpp_initialize__aeabi_` 调用任何顶级对象的构造函数。
 
 3. 调用 `main()` ，即应用程序的用户级根目录。在 `main()` 中，您的程序可能会调用库函数。
 
-4. 使用 `main()` 返回的值调用 `exit()` 。
+4.使用 `main()` 返回的值调用 `exit()` 。
 
 
-主应用程序结束执行后，`__rt_entry` 将库关闭，然后把控制权交换给调试器。函数标签 `main()` 具有特殊含义。
-`Main()` 函数的存在强制链接器链接到 `__main` 和 `__rt_entry` 中的代码。如果没有标记为 `main()` 的函数，则没有链接到初始化序列，
+主应用程序结束执行后，`__rt_entry` 将库关闭，然后把控制权交换给调试器。函数标签main()具有特殊含义。
+Main()函数的存在强制链接器链接到 `__main` 和 `__rt_entry` 中的代码。如果没有标记为main()的函数，则没有链接到初始化序列，
 因而部分标准C库功能得不到支持。
 
-__rt_entry 调用的函数
-~~~~~~~~~~~~~~~~~~~~~~~
+function
+~~~~~~~~~~~~~~~
 
 _platform_pre_stackheap_init
 --------------------------------
@@ -178,59 +178,51 @@ __rt_lib_init
 _platform_post_lib_init
 ---------------------------
 
+279/5000
 C 库不提供此功能，但是您可以根据需要定义它。 例如，您可以使用此功能来设置硬件。 
 如果定义了此函数 `__rt_entry` 调用之后，，则在调用 `__rt_lib_init` 之后且在调用用户级 `main()` 函数之前调用此函数。
 
 
+Nordic 的启动文件
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+启动文件里面有三大部分：
+
+1. 堆栈的初始化
+#. 初始化中断向量表
+#. Reset_Handler 函数
+
+
+这里我以 `Nordic` 的 `nrf52840` 的启动文件为例讲解：
+
+因为 `Nordic` 的 SDK 中启动文件是有4种类型的。
+有 Keil编译器 、IAR编译器、 SES编译器和直接调用GCC编译 4种。这里会逐个进行讲解。
+
+Keil 编译器调用的是 `arm_startup_nrf52840.s`,
+IAR 编译器调用的是 `iar_startup_nrf52840.s`,
+SES 编译器调用的是 `ses_startup_nrf52840.s`,
+GCC 直接编译调用的是 `gcc_startup_nrf52840.S`.
+
+.. note::
+  前面三种启动文件可以通过编译器设置配置。一般工程都是已经配置好了的，如果是自己新建的工程需要自己配置。
+  最后 使用GCC 直接编译的方法需要自己在 Makefile 中添加启动文件。
+  一般我们看到的 STM32的启动文件基本上几基于 Keil 编译器的。
+
+
+在讲解启动文件之前，我们需要先了解一下程序的入口地址。
+我们都知道通过链接器LD文件设置进程入口地址。方法有以下五种：(排名越靠前，优先级越高)
+
+  1. `ld` 命令行的 -`e` 选项
+  #. 链接脚本的ENTRY(SYMBOL)命令
+  #. 如果定义了 `start` 符号, 使用 `_start` 符号值
+  #. 如果存在 `.text` 段(section), 使用 `.text` 段(section) 的第一字节的位置值
+  #. 直接使用数值 `0`
 
 
 
-__rt_lib_init 调用的函数
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+启动文件讲解1 
+-------------------
 
-链接器包括内部对象文件中的各种初始化代码段，用于创建自定义 `__rt_lib_int` 函数。 
-链接器仅在应用程序需要时才将函数放在 `__rt_lib_init` 中。
-这列出了 `_rt_lib_init` 可以调用的函数。 这些函数按调用顺序列出：
-
-1. _fp_init
-2. _init_alloc
-3. _rand_init
-4. _get_lc_collate
-5. _get_lc_ctype
-6. _get_lc_monetary
-7. _get_lc_numeric
-8. _get_lc_time
-9. _atexit_init
-10. _signal_init
-11. _fp_trap_init
-12. _clock_init
-13. _getenv_init
-14. _initio
-15. _ARM_get_argv
-16. _alloca_initialize
-17. _ARM_exceptions_init
-18. __cpp_initialize__aeabi_
-
-
-_fp_init
---------------------
-
-此功能通过设置 `FP` 状态字来初始化浮点环境。 如果用户应用程序使用VFP硬件，则该函数将初始化浮点状态和控制寄存器（ `FPSCR` ）。
-如果应用程序使用软件 `VFP` ，则该功能将初始化内存中的 `FP` 状态字。 `__rt_lib_init` 始终在启动期间调用此函数。
-调用 `fp_init` 的方式取决于ARM编译器版本：
-
- - ARM  Complier v4.1
-    `fp_init` 总是在启动过程中被调用。
- - ARM Complier 5
-    除非您同时使用 `softfp` 和不带状态字的 `FP` 模型（ `--fpmode = {ieee_no_fenv，std，fast}` ），
-    否则在启动过程中将调用 `_fp_init` 。 在这种情况下，将完全省略对 `_fp_init` 的调用。
-
-
-_init_alloc
---------------------
-
-此函数设置 `malloc` ， `free` 和其他相关函数使用的数据结构。 该函数有2个参数。 
-第一个参数，在寄存器 `r0` 中，是堆内存块( `heapbase` )，并且第二参数，在寄存器 `r1` 的开始，是堆内存块( `heaptop` )的端部。 
-如果没有将这些堆限定的参数作为参数传递给 `__rt_lib_init` ，则 `__rt_lib_init` 会使用符号 `__heap_base` 和 `__heap_limit` 
-或特殊的分散加载区来加载它们，请参见 `__rt_entry` 调用的函数。 如果应用程序使用堆，则 `__rt_lib_init` 调用此函数。
+我们先来讲解 基于 Keil 编译器的启动文件
 
