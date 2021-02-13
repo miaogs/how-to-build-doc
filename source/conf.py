@@ -28,14 +28,14 @@ author = 'Micheal Miao'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-'sphinx_rtd_theme',
-'recommonmark',
-'sphinxcontrib.plantuml'
+'sphinx_rtd_theme',#theme
+'recommonmark', #markdowm
+'sphinxcontrib.plantuml',#plantuml
 ]
 
 # Specify plantuml command in your conf.py
 if sys.platform == 'darwin':# MAC platform
-    plantuml = 'java -jar /Users/gmiao/tools/plantuml.jar.jar'
+    plantuml = 'java -jar /Users/gmiao/tools/plantuml.jar'
 
 
 # Add any paths that contain templates here, relative to this directory.
