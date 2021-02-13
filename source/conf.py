@@ -11,7 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 # import os
-# import sys
+import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import sphinx_rtd_theme #import theme
 
@@ -28,9 +28,15 @@ author = 'Micheal Miao'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_rtd_theme",
-    "recommonmark"
+'sphinx_rtd_theme',
+'recommonmark',
+'sphinxcontrib.plantuml'
 ]
+
+# Specify plantuml command in your conf.py
+if sys.platform == 'darwin':# MAC platform
+    plantuml = 'java -jar /Users/gmiao/tools/plantuml.jar.jar'
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

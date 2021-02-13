@@ -14,6 +14,7 @@ Welcome to How To Build Doc's documentation!
    quickstart
    support_markdown
    support_mark
+   support_plantuml
    generate_pdf
    preview_html
    read_the_doc
