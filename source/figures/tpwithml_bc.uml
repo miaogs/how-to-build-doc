@@ -1,0 +1,21 @@
+@startuml
+ditaa
+
+             +------------------+
+             |                  |
+     Rules   |     cPNK         |  Answers
++----------> |    Traditional   | ---------->
+     Date    |    Programing    |
++----------> |                  |
+             |                  |
+             +------------------+
+
+             +------------------+
+             |                  |
+             |     cPNK         |    Rules
+  Answers    |    Traditional   | ---------->
++----------> |    Programing    |    Date  
+             |                  | ---------->
+             |                  |
+             +------------------+
+@enduml
