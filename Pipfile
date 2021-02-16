@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+sphinx = "*"
+sphinxcontrib-plantuml = "*"
+sphinxcontrib-fulltoc = "*"
+pyyaml = "*"
+ruamel-yaml = "*"
+sphinx-rtd-theme = "*"
+sphinxcontrib-httpdomain = "*"
+recommonmark= "*"
+pillow= "*"
+
+[requires]
+python_version = "3"
