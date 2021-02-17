@@ -1,4 +1,4 @@
-FROM sphinxdoc/sphinx
+FROM sphinxdoc/sphinx-latexpdf
 
 # 通过镜像标签声明了作者信息
 LABEL maintainer="Michael Miao(1247508314@qq.com)"
@@ -46,4 +46,4 @@ COPY Pipfile ./
 RUN pipfile2req Pipfile > requirements.txt \
  && pip install --no-cache-dir -r requirements.txt
 
-CMD ["make", "html"]
+CMD ["make", "latexpdf"]
